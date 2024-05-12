@@ -8,7 +8,6 @@ import {AutomationCompatibleInterface} from "@chainlink/contracts/src/v0.8/inter
 import {Check} from "../src/Library.sol";
 
 contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
-    
     using Check for address;
 
     error Raffle__NotEnoughETH();
@@ -129,5 +128,29 @@ contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
         if (!success) {
             revert Raffle_TransferFailed();
         }
+    }
+
+    function getRaffleState() external view returns (RaffleState) {
+        return s_raffleState;
+    }
+
+    function getPlayersLength() external view returns (uint256) {
+        return s_players.length;
+    }
+
+    function getPlayerByIndex(uint256 _index) external view returns (address) {
+        return s_players[_index];
+    }
+
+    function getEntraceFee() external view returns (uint256) {
+        return i_entranceFee;
+    }
+
+    function getRecentWinner() external view returns (address) {
+        return s_recentWinner;
+    }
+
+    function getLastTimeStamp() external view returns (uint256) {
+        return s_lastTimeStamp;
     }
 }
