@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
+pragma solidity 0.8.19;
 
 import {Script, console} from "forge-std/Script.sol";
 import {HelperConfig} from "./HelperConfig.s.sol";
@@ -100,7 +100,7 @@ contract FundSubscription is Script {
             (uint64 updatedSubId, address updatedVRFv2) = createSub.run();
             subId = updatedSubId;
             vrfCoordinatorV2 = updatedVRFv2;
-            console.log("New SubId Created! ", subId, "VRF Address: ", vrfCoordinatorV2);
+            console.log("Sub Id is:", subId, " VRF Address: ", vrfCoordinatorV2);
         }
 
         fundSubscription(vrfCoordinatorV2, subId, link, deployerKey);
@@ -112,9 +112,6 @@ contract FundSubscription is Script {
         address link,
         uint256 deployerKey
     ) public {
-        console.log("Funding subscription: ", subId);
-        console.log("Using vrfCoordinator: ", vrfCoordinatorV2);
-        console.log("On ChainID: ", block.chainid);
         if (block.chainid == 31337) {
             vm.startBroadcast(deployerKey);
             VRFCoordinatorV2Mock(vrfCoordinatorV2).fundSubscription(
@@ -123,10 +120,6 @@ contract FundSubscription is Script {
             );
             vm.stopBroadcast();
         } else {
-            console.log(LinkToken(link).balanceOf(msg.sender));
-            console.log(msg.sender);
-            console.log(LinkToken(link).balanceOf(address(this)));
-            console.log(address(this));
             vm.startBroadcast(deployerKey);
             LinkToken(link).transferAndCall(
                 vrfCoordinatorV2,
